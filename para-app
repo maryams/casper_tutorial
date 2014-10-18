@@ -1,0 +1,92 @@
+/*================================================
+    
+    ****************************************
+            PARANORMAL APPTIVITY
+    ****************************************
+
+
+    $ sudo npm install -g casperjs
+
+    requires python and phantom js (which can be 
+    installed with homebrew. It is therefore not 
+    in npm. it is in:
+
+    During install:
+    PhantomJS is already installed at: 
+    /usr/local/bin/phantomjs
+    -- "not a directory"
+
+    $ brew --prefix phantomjs 
+    /usr/local/opt/phantomjs
+
+    DELETED
+    $ brew --prefix phantomjs 
+    /usr/local/Cellar/phantomjs/1.9.7_1
+
+    $ phantomjs --version
+    1.9.7
+    $ python --version
+    Python 2.7.5
+
+    Casper is at:
+    /usr/local/lib/node_modules/casperjs
+
+    IT'S ONLY FUCKING STARTED WORKING AT 00:14!?
+
+=================================================*/
+
+
+var casper = require('casper').create();
+
+
+/* --------------------------------------------
+ * First casper will run two sites one after 
+ * the other and return the titles and 
+ * load times. whatitismufugga. */
+var startTime = Date.now();
+var chapsTime, kodeTime, neapTime;
+
+
+casper.start('http://fc-chaps.github.io', function () {
+    console.log("**************");
+    this.echo("Site Title: " + this.getTitle());
+    chapsTime = (Date.now() - startTime);
+    this.echo("Load time: " + chapsTime + "ms");
+    console.log("**************");
+});
+
+casper.thenOpen('http://kodeiv.github.io/', function() {
+    this.echo("Site Title: " + this.getTitle());
+    kodeTime = (Date.now() - startTime - chapsTime);
+    this.echo("Load time: " + kodeTime + "ms");
+    console.log("**************");
+});
+
+casper.thenOpen('http://neapolitan-a-la-code.github.io/blog/', function() {
+    this.echo("Site Title: " + this.getTitle());
+    neapTime = (Date.now() - startTime - chapsTime - kodeTime);
+    this.echo("Load time: " + neapTime + "ms");
+    console.log("**************");
+});
+
+casper.thenOpen('http://coderunners14.github.io/', function() {
+    this.echo("Site Title: " + this.getTitle());
+    runTime = (Date.now() - startTime - chapsTime - kodeTime - neapTime);
+    this.echo("Load time: " + runTime + "ms");
+    console.log("**************");
+});
+
+casper.run();
+
+
+
+
+
+
+
+
+
+
+
+
+

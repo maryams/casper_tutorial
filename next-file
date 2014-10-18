@@ -1,0 +1,53 @@
+
+/*
+ * Nextlevel: Scrape google search results and
+ * print out the url of every link on the first
+ * page of results.
+ */
+
+var casper = require('casper').create();
+
+var links = [];
+
+// We define this function to be used later in the code.
+function getLinks() {
+    //Vanilla JS to return a nodelist of elements matching the sleector
+    var links = document.querySelectorAll('h3.r a');
+    // .map creates (with the .call method) 
+    // a new array from the links array that contains 
+    // just the links (getAttribute) from the anchor tags selected above.
+    return Array.prototype.map.call(links, function (e) {
+        return e.getAttribute('href').substring(7);
+    });
+}
+
+// Configures and starts Casper, then open the provided url and optionally adds the step provided by the then argument:
+casper.start('http://google.fr/', function () {
+    // .fill takes Arguments: selector, vals, submit
+    this.fill('form[action="/search"]', { /* ID */ q: 'founders and coders' }, true);
+});
+
+// then() basically adds a new navigation step in a stack
+// When you have defined your navigation steps, run() executes 
+// them one by one sequentially:
+casper.then(function () {
+    // aggregate results
+    links = links.concat(this.evaluate(getLinks));
+});
+
+// Casper.run() can be run without passing a callback but here we want to 
+// print the results directly to the console.
+casper.run(function () {
+    // echo results in some pretty fashion
+    this.echo(links.length + ' links found:');
+    this.echo(' - ' + links.join('\n - ')).exit(); //exit() exits phantom js
+});
+
+
+/*================================================
+
+Okay that's enough mate 02:07...
+
+Tell em about the documentation too.
+
+*/
